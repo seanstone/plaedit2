@@ -1,7 +1,9 @@
 # Binaryen required to compile to WASM
+export BINARYEN := /usr
+EMFLAGS += -s WASM=1
 
 INCLUDE += -I glad/include
-CFLAGS += -O2 #-s WASM=1
+CFLAGS += -s WASM=1
 LDFLAGS += -lglfw3 -lGL -lpthread -lm -ldl
 XLDFLAGS += -lX11 -lXrandr -lXi -lXcursor -lXxf86vm -lXinerama
 EMFLAGS += -s NO_EXIT_RUNTIME=1 -s USE_GLFW=3
