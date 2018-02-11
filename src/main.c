@@ -13,7 +13,7 @@ EM_BOOL MouseHandler(int eventType, const EmscriptenMouseEvent *mouseEvent, void
 #include <GLFW/glfw3.h>
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
-int loop (void);
+void loop (void);
 GLFWwindow* window;
 
 void processInput(GLFWwindow *window)
@@ -86,7 +86,7 @@ int main (void)
     return 0;
 }
 
-int loop (void)
+void loop (void)
 {
     processInput(window);
 
@@ -95,8 +95,6 @@ int loop (void)
 
     glfwSwapBuffers(window);
     glfwPollEvents();
-
-    return 0;
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
