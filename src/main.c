@@ -1,19 +1,14 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include "main.h"
+#include "demo.h"
 
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#include <emscripten/html5.h>
-EM_BOOL ResizeHandler(int eventType, const EmscriptenUiEvent *uiEvent, void *userData);
-EM_BOOL MouseHandler(int eventType, const EmscriptenMouseEvent *mouseEvent, void *userData);
-#else
-#include <glad/glad.h>
-#endif
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/mman.h>
 
-#include <GLFW/glfw3.h>
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
-void loop (void);
 GLFWwindow* window;
 
 void processInput(GLFWwindow *window)
@@ -24,7 +19,7 @@ void processInput(GLFWwindow *window)
 
 int main (void)
 {
-    printf("Hello world!\n");
+    printf("Main function begin\n");
 
     #ifdef __EMSCRIPTEN__
     EM_ASM(
@@ -34,15 +29,13 @@ int main (void)
 	);
     #endif
 
-    printf("Initializing GLFW...\n");
-
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-    printf("Creating GLFW window...\n");
+    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+    printf("GLFW intialized\n");
 
     window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
     if (window == NULL)
@@ -51,9 +44,8 @@ int main (void)
         glfwTerminate();
         return -1;
     }
-    glfwMakeContextCurrent(window);
-
     printf("GLFW window created\n");
+    glfwMakeContextCurrent(window);
 
     #ifndef __EMSCRIPTEN__
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -64,6 +56,15 @@ int main (void)
     #endif
 
     glViewport(0, 0, 800, 600);
+
+    int fd = open("glsl/vertex.glsl", O_RDONLY);
+    if (fd == -1) printf("File open error\n");
+    else printf("File opened\n");
+    int len = lseek(fd, 0, SEEK_END);
+    char* data = mmap(0, len, PROT_READ, MAP_PRIVATE, fd, 0);
+    printf("%s", data);
+
+    //demo_init();
 
     #ifdef __EMSCRIPTEN__
     emscripten_set_resize_callback(0, 0, true, ResizeHandler);
@@ -99,13 +100,26 @@ void loop (void)
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
+    printf("framebuffer_size_callback:\n");
     glViewport(0, 0, width, height);
 }
 
 #ifdef __EMSCRIPTEN__
 EM_BOOL ResizeHandler(int eventType, const EmscriptenUiEvent *uiEvent, void *userData)
 {
-	//emscripten_get_canvas_size(&width, &height, &isFullscreen);
+    int width, height, isFullscreen;
+
+    EMSCRIPTEN_RESULT r = emscripten_get_canvas_element_size("#canvas", &width, &height);
+    if (r != EMSCRIPTEN_RESULT_SUCCESS)
+        ;/* handle error */
+    EmscriptenFullscreenChangeEvent e;
+    r = emscripten_get_fullscreen_status(&e);
+    if (r != EMSCRIPTEN_RESULT_SUCCESS)
+        ;/* handle error */
+    isFullscreen = e.isFullscreen;
+
+    printf("ResizeHandler: %u %u %u\n", width, height, isFullscreen);
+
 	return true;
 }
 
