@@ -3,12 +3,6 @@
 #include "main.h"
 #include "demo.h"
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/mman.h>
-
 GLFWwindow* window;
 
 void processInput(GLFWwindow *window)
@@ -57,14 +51,7 @@ int main (void)
 
     glViewport(0, 0, 800, 600);
 
-    int fd = open("glsl/vertex.glsl", O_RDONLY);
-    if (fd == -1) printf("File open error\n");
-    else printf("File opened\n");
-    int len = lseek(fd, 0, SEEK_END);
-    char* data = mmap(0, len, PROT_READ, MAP_PRIVATE, fd, 0);
-    printf("%s", data);
-
-    //demo_init();
+    demo_init();
 
     #ifdef __EMSCRIPTEN__
     emscripten_set_resize_callback(0, 0, true, ResizeHandler);
@@ -93,6 +80,12 @@ void loop (void)
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    glUseProgram(shaderProgram);
+    glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+    //glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    // glBindVertexArray(0); // no need to unbind it every time
 
     glfwSwapBuffers(window);
     glfwPollEvents();
