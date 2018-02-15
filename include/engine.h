@@ -5,6 +5,8 @@ typedef struct Engine_t
 {
     int ShaderProgram;
     unsigned int VBO, VAO, EBO;
+
+    int Texture;
 } Engine_t;
 
 int Engine_init (Engine_t* engine);
