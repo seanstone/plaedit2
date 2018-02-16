@@ -1,12 +1,11 @@
-#define in attribute
-#define out varying
+#version 300 es
 
-in vec3 aPos;
-in vec3 aColor;
-in vec2 aTexCoord;
+in mediump vec3 aPos;
+in mediump vec3 aColor;
+in mediump vec2 aTexCoord;
 
-out vec3 ourColor;
-out vec2 TexCoord;
+out mediump vec3 ourColor;
+out mediump vec2 TexCoord;
 
 uniform vec2 WindowSize;
 

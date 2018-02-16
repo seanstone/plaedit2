@@ -1,13 +1,12 @@
-precision mediump float;
+#version 300 es
 
-#define in varying
-#define texture texture2D
-
-in vec3 ourColor;
-in vec2 TexCoord;
+in mediump vec3 ourColor;
+in mediump vec2 TexCoord;
 
 uniform sampler2D ourTexture;
 
+out mediump vec4 FragColor;
+
 void main() {
-   gl_FragColor = texture(ourTexture, TexCoord);
+   FragColor = texture(ourTexture, TexCoord);
 }

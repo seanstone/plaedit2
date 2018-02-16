@@ -8,12 +8,7 @@ EM_BOOL ResizeHandler(int eventType, const EmscriptenUiEvent *uiEvent, void *use
 EM_BOOL MouseHandler(int eventType, const EmscriptenMouseEvent *mouseEvent, void *userData);
 #endif
 
-#define GL_GLEXT_PROTOTYPES 1
-#define GL3_PROTOTYPES 1
-#ifndef __EMSCRIPTEN__
-#include <glad/glad.h>
-#endif
-#include <GLFW/glfw3.h>
+#include "graphics.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void window_size_callback(GLFWwindow* window, int width, int height);
