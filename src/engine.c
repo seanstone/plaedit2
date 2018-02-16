@@ -56,6 +56,8 @@ int Engine_init (Engine_t* engine)
     return 0;
 }
 
+#define TILE_SIZE 100
+
 int Engine_render (Engine_t* engine)
 {
     glUseProgram(engine->ShaderProgram);
@@ -69,7 +71,7 @@ int Engine_render (Engine_t* engine)
 
     glBindVertexArray(engine->VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
     //glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ENGINE_ATTRIB_POSITION, 2);
+    glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ENGINE_ATTRIB_POSITION, (width/TILE_SIZE + 1) * (height/TILE_SIZE + 1) );
     // glBindVertexArray(0); // no need to unbind it every time
     return 0;
 }
