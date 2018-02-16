@@ -32,23 +32,23 @@ int main (void)
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
     printf("GLFW intialized\n");
 
+    int width, height;
     #ifdef __EMSCRIPTEN__
-    double width_d, height_d;
-    emscripten_get_element_css_size(0, &width_d, &height_d);
-    Engine.WindowWidth = (int) width_d; Engine.WindowHeight = (int) height_d;
+    emscripten_get_canvas_element_size(0, &width, &height);
     #else
-    Engine.WindowWidth = 800; Engine.WindowHeight = 600;
+    width = 800; height = 600;
     #endif
 
-    window = glfwCreateWindow(Engine.WindowWidth, Engine.WindowHeight, "LearnOpenGL", NULL, NULL);
+    window = glfwCreateWindow(width, height, "LearnOpenGL", NULL, NULL);
     if (window == NULL)
     {
         printf("Failed to create GLFW window\n");
         glfwTerminate();
         return -1;
     }
-    printf("GLFW window created: %u, %u\n", Engine.WindowWidth, Engine.WindowHeight);
+    printf("GLFW window created: %u, %u\n", width, height);
     glfwMakeContextCurrent(window);
+    glViewport(0, 0, width, height);
 
     #ifndef __EMSCRIPTEN__
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -58,7 +58,6 @@ int main (void)
     }
     #endif
 
-    glViewport(0, 0, Engine.WindowWidth, Engine.WindowHeight);
     Engine_init(&Engine);
 
     #ifdef __EMSCRIPTEN__
@@ -68,6 +67,7 @@ int main (void)
     emscripten_set_mousemove_callback(0, 0, true, MouseHandler);
     #endif
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetWindowSizeCallback(window, window_size_callback);
 
     #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop(loop, 0, 1);
@@ -89,8 +89,6 @@ void loop (void)
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glViewport(0, 0, Engine.WindowWidth, Engine.WindowHeight);
-
     Engine_render(&Engine);
 
     glfwSwapBuffers(window);
@@ -99,21 +97,22 @@ void loop (void)
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    printf("framebuffer_size_callback: %u, %u\n", width, height);
-    Engine.WindowWidth     = width;
-    Engine.WindowHeight    = height;
-    glViewport(0, 0, Engine.WindowWidth, Engine.WindowHeight);
+    //printf("framebuffer_size_callback: %u, %u\n", width, height);
+    //glViewport(0, 0, width, height);
+}
+
+void window_size_callback(GLFWwindow* window, int width, int height)
+{
+    //printf("window_size_callback: %u, %u\n", width, height);
+    glViewport(0, 0, width, height);
 }
 
 #ifdef __EMSCRIPTEN__
 EM_BOOL ResizeHandler(int eventType, const EmscriptenUiEvent *uiEvent, void *userData)
 {
-    // Engine.WindowWidth     = uiEvent->documentBodyClientWidth;
-    // Engine.WindowHeight    = uiEvent->documentBodyClientHeight;
-    printf("ResizeHandler: %u, %u\n", uiEvent->documentBodyClientWidth, uiEvent->documentBodyClientHeight);
-    // glfwSetWindowSize(window, Engine.WindowWidth, Engine.WindowHeight);
-    // glViewport(0, 0, Engine.WindowWidth, Engine.WindowHeight);
-
+    //printf("ResizeHandler: %u, %u\n", uiEvent->documentBodyClientWidth, uiEvent->documentBodyClientHeight);
+    emscripten_set_canvas_element_size("#canvas", uiEvent->documentBodyClientWidth, uiEvent->documentBodyClientHeight);
+    glfwSetWindowSize(window, uiEvent->documentBodyClientWidth, uiEvent->documentBodyClientHeight);
 	return true;
 }
 
