@@ -34,7 +34,9 @@ int main (void)
 
     int width, height;
     #ifdef __EMSCRIPTEN__
-    emscripten_get_canvas_element_size(0, &width, &height);
+    double width_d, height_d;
+    emscripten_get_element_css_size("#canvas", &width_d, &height_d);
+    width = (int) width_d; height = (int) height_d;
     #else
     width = 800; height = 600;
     #endif
