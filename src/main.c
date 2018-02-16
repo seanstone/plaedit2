@@ -32,14 +32,22 @@ int main (void)
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
     printf("GLFW intialized\n");
 
-    window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+    #ifdef __EMSCRIPTEN__
+    double width_d, height_d;
+    emscripten_get_element_css_size(0, &width_d, &height_d);
+    Engine.WindowWidth = (int) width_d; Engine.WindowHeight = (int) height_d;
+    #else
+    Engine.WindowWidth = 800; Engine.WindowHeight = 600;
+    #endif
+
+    window = glfwCreateWindow(Engine.WindowWidth, Engine.WindowHeight, "LearnOpenGL", NULL, NULL);
     if (window == NULL)
     {
         printf("Failed to create GLFW window\n");
         glfwTerminate();
         return -1;
     }
-    printf("GLFW window created\n");
+    printf("GLFW window created: %u, %u\n", Engine.WindowWidth, Engine.WindowHeight);
     glfwMakeContextCurrent(window);
 
     #ifndef __EMSCRIPTEN__
@@ -50,8 +58,7 @@ int main (void)
     }
     #endif
 
-    glViewport(0, 0, 800, 600);
-
+    glViewport(0, 0, Engine.WindowWidth, Engine.WindowHeight);
     Engine_init(&Engine);
 
     #ifdef __EMSCRIPTEN__
@@ -82,6 +89,8 @@ void loop (void)
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    glViewport(0, 0, Engine.WindowWidth, Engine.WindowHeight);
+
     Engine_render(&Engine);
 
     glfwSwapBuffers(window);
@@ -90,25 +99,20 @@ void loop (void)
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    printf("framebuffer_size_callback:\n");
-    glViewport(0, 0, width, height);
+    printf("framebuffer_size_callback: %u, %u\n", width, height);
+    Engine.WindowWidth     = width;
+    Engine.WindowHeight    = height;
+    glViewport(0, 0, Engine.WindowWidth, Engine.WindowHeight);
 }
 
 #ifdef __EMSCRIPTEN__
 EM_BOOL ResizeHandler(int eventType, const EmscriptenUiEvent *uiEvent, void *userData)
 {
-    int width, height, isFullscreen;
-
-    EMSCRIPTEN_RESULT r = emscripten_get_canvas_element_size("#canvas", &width, &height);
-    if (r != EMSCRIPTEN_RESULT_SUCCESS)
-        ;/* handle error */
-    EmscriptenFullscreenChangeEvent e;
-    r = emscripten_get_fullscreen_status(&e);
-    if (r != EMSCRIPTEN_RESULT_SUCCESS)
-        ;/* handle error */
-    isFullscreen = e.isFullscreen;
-
-    printf("ResizeHandler: %u %u %u\n", width, height, isFullscreen);
+    // Engine.WindowWidth     = uiEvent->documentBodyClientWidth;
+    // Engine.WindowHeight    = uiEvent->documentBodyClientHeight;
+    printf("ResizeHandler: %u, %u\n", uiEvent->documentBodyClientWidth, uiEvent->documentBodyClientHeight);
+    // glfwSetWindowSize(window, Engine.WindowWidth, Engine.WindowHeight);
+    // glViewport(0, 0, Engine.WindowWidth, Engine.WindowHeight);
 
 	return true;
 }

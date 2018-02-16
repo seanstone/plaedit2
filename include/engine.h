@@ -3,6 +3,7 @@
 
 typedef struct Engine_t
 {
+    volatile int WindowWidth, WindowHeight;
     int ShaderProgram;
     unsigned int VBO, VAO, EBO;
 

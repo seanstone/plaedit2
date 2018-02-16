@@ -15,11 +15,11 @@
 		<script src="dist/main.js"></script>
 	</head>
 	<body>
-  		<canvas id="canvas"></canvas>
 		<div style="position:absolute; left:5%; top:5%; z-index:1;">
-			<input id="fileinput" type="file" accept=".pla"/><br/>
+			<input id="fileinput" type="file" accept=".pla"/>
 			<button onclick="loadFileAsText()">LOAD</button>
 		</div>
+		<canvas id="canvas"></canvas>
 		<script>
 		function loadFileAsText(){
 			var fileToLoad = document.getElementById("fileinput").files[0];
