@@ -56,7 +56,7 @@ int Engine_init (Engine_t* engine)
     return 0;
 }
 
-#define TILE_SIZE 100
+#define TILE_SIZE 30
 
 int Engine_render (Engine_t* engine)
 {
