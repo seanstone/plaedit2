@@ -3,10 +3,9 @@
 	<head>
 		<title>Emscripten OpenGL Example</title>
 		<style>
-            * { margin:0; padding:none; color: white; border: 0px none }
+            * { margin:0; padding:none; border: 0px none }
             html, body { width:100%; height:100%; overflow: hidden; font-family:sans-serif; }
             canvas { display:block; width:100%; height:100%; z-index: 0; }
-			#mousepos { position:absolute; right:5%; top:5%; z-index:1; }
         </style>
 		<script>
 			var Module = {};
@@ -17,6 +16,20 @@
 	</head>
 	<body>
   		<canvas id="canvas"></canvas>
-		<div id="mousepos">0, 0</div>
+		<div style="position:absolute; left:5%; top:5%; z-index:1;">
+			<input id="fileinput" type="file"/><br/>
+			<button onclick="loadFileAsText()">LOAD</button>
+		</div>
+		<script>
+		function loadFileAsText(){
+			var fileToLoad = document.getElementById("fileinput").files[0];
+			var fileReader = new FileReader();
+			fileReader.onload = function(fileLoadedEvent){
+				Module['FS_createDataFile'](".", fileToLoad.name, fileReader.result, true, true);
+				console.log(fileReader.result);
+			};
+			fileReader.readAsBinaryString(fileToLoad);
+		}
+		</script>
 	</body>
 </html>
