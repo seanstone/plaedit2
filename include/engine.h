@@ -1,8 +1,16 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+#define GL_GLEXT_PROTOTYPES 1
+#define GL3_PROTOTYPES 1
+#ifndef __EMSCRIPTEN__
+#include <glad/glad.h>
+#endif
+#include <GLFW/glfw3.h>
+
 typedef struct Engine_t
 {
+    GLFWwindow* Window;
     int ShaderProgram;
     unsigned int VBO, VAO, EBO;
 

@@ -3,13 +3,12 @@
 #include "main.h"
 #include "engine.h"
 
-GLFWwindow* window;
 Engine_t Engine;
 
 void processInput(GLFWwindow *window)
 {
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+    if(glfwGetKey(Engine.Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(Engine.Window, true);
 }
 
 int main (void)
@@ -41,15 +40,15 @@ int main (void)
     width = 800; height = 600;
     #endif
 
-    window = glfwCreateWindow(width, height, "LearnOpenGL", NULL, NULL);
-    if (window == NULL)
+    Engine.Window = glfwCreateWindow(width, height, "LearnOpenGL", NULL, NULL);
+    if (Engine.Window == NULL)
     {
         printf("Failed to create GLFW window\n");
         glfwTerminate();
         return -1;
     }
     printf("GLFW window created: %u, %u\n", width, height);
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(Engine.Window);
     glViewport(0, 0, width, height);
 
     #ifndef __EMSCRIPTEN__
@@ -68,13 +67,13 @@ int main (void)
     emscripten_set_mouseup_callback(0, 0, true, MouseHandler);
     emscripten_set_mousemove_callback(0, 0, true, MouseHandler);
     #endif
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetWindowSizeCallback(window, window_size_callback);
+    glfwSetFramebufferSizeCallback(Engine.Window, framebuffer_size_callback);
+    glfwSetWindowSizeCallback(Engine.Window, window_size_callback);
 
     #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop(loop, 0, 1);
     #else
-    while(!glfwWindowShouldClose(window))
+    while(!glfwWindowShouldClose(Engine.Window))
     {
         loop();
     }
@@ -86,14 +85,14 @@ int main (void)
 
 void loop (void)
 {
-    processInput(window);
+    processInput(Engine.Window);
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     Engine_render(&Engine);
 
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(Engine.Window);
     glfwPollEvents();
 }
 
@@ -114,7 +113,7 @@ EM_BOOL ResizeHandler(int eventType, const EmscriptenUiEvent *uiEvent, void *use
 {
     //printf("ResizeHandler: %u, %u\n", uiEvent->documentBodyClientWidth, uiEvent->documentBodyClientHeight);
     emscripten_set_canvas_element_size("#canvas", uiEvent->documentBodyClientWidth, uiEvent->documentBodyClientHeight);
-    glfwSetWindowSize(window, uiEvent->documentBodyClientWidth, uiEvent->documentBodyClientHeight);
+    glfwSetWindowSize(Engine.Window, uiEvent->documentBodyClientWidth, uiEvent->documentBodyClientHeight);
 	return true;
 }
 

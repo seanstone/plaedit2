@@ -4,6 +4,10 @@
 #include "engine.h"
 #include "texture.h"
 
+#define ENGINE_ATTRIB_POSITION  0
+#define ENGINE_ATTRIB_COLOR     1
+#define ENGINE_ATTRIB_TEXCOORD  2
+
 int Engine_init (Engine_t* engine)
 {
     engine->ShaderProgram = loadProgram("glsl/vertex.glsl", "glsl/fragment.glsl");
@@ -22,6 +26,18 @@ int Engine_init (Engine_t* engine)
         1, 2, 3   // second Triangle
     };
 
+    float quadVertices[] =
+    {
+        // positions     // colors
+        -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+         0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+        -0.05f, -0.05f,  0.0f, 0.0f, 1.0f,
+
+        -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+         0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+         0.05f,  0.05f,  0.0f, 1.0f, 1.0f
+    };
+
     glGenVertexArrays(1, &engine->VAO);
     glGenBuffers(1, &engine->VBO);
     glGenBuffers(1, &engine->EBO);
@@ -36,14 +52,14 @@ int Engine_init (Engine_t* engine)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(ENGINE_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(ENGINE_ATTRIB_POSITION);
     // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(ENGINE_ATTRIB_COLOR, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(ENGINE_ATTRIB_COLOR);
     // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(ENGINE_ATTRIB_TEXCOORD, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(ENGINE_ATTRIB_TEXCOORD);
 
     engine->Texture = loadTexture("textures/container.jpg");
 
@@ -62,13 +78,18 @@ int Engine_init (Engine_t* engine)
 
 int Engine_render (Engine_t* engine)
 {
+    glUseProgram(engine->ShaderProgram);
+
+    int width, height;
+    glfwGetWindowSize(engine->Window, &width, &height);
+    glUniform2f(glGetUniformLocation(engine->ShaderProgram, "WindowSize"), width, height);
+
     // bind Texture
     glBindTexture(GL_TEXTURE_2D, engine->Texture);
 
-    glUseProgram(engine->ShaderProgram);
     glBindVertexArray(engine->VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
     //glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ENGINE_ATTRIB_POSITION, 2);
     // glBindVertexArray(0); // no need to unbind it every time
     return 0;
 }
