@@ -17,8 +17,8 @@ vec2 Pixel2Screen (vec2 pixelPos)
 }
 
 void main() {
-    int columns = int(float(WindowSize.x) / TileZoom) + 1;
-    vec2 VertexPos = Pixel2Screen((vec2(gl_InstanceID % columns, gl_InstanceID / columns) + QuadPos) * TileZoom);
+    int rows = 64;
+    vec2 VertexPos = Pixel2Screen((vec2(gl_InstanceID / rows, gl_InstanceID % rows) + QuadPos) * TileZoom);
     gl_Position = vec4(VertexPos.x, -VertexPos.y, 0.0, 1.0);
 
     switch (int(PlaData[0]) >> 4)

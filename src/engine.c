@@ -77,7 +77,7 @@ int Engine_render (Engine_t* engine)
     glBindTexture(GL_TEXTURE_2D, engine->TileTexture);
 
     glBindVertexArray(engine->VAO);
-    glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ENGINE_ATTRIB_POSITION, (width/engine->TileZoom + 1) * (height/engine->TileZoom + 1) );
+    glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ENGINE_ATTRIB_POSITION, 128 * 64);
     //glBindVertexArray(0);
 
     return 0;
