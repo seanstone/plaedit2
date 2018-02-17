@@ -69,6 +69,7 @@ int main (void)
     #endif
     glfwSetFramebufferSizeCallback(Engine.Window, framebuffer_size_callback);
     glfwSetWindowSizeCallback(Engine.Window, window_size_callback);
+    glfwSetScrollCallback(Engine.Window, scroll_callback);
 
     #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop(loop, 0, 1);
@@ -106,6 +107,14 @@ void window_size_callback(GLFWwindow* window, int width, int height)
 {
     //printf("window_size_callback: %u, %u\n", width, height);
     glViewport(0, 0, width, height);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    //printf("scroll_callback: %f, %f\n", xoffset, yoffset);
+    if (yoffset > 0 && Engine.TileSize > 1.0) Engine.TileSize /= 1.1;
+    else if (yoffset < 0) Engine.TileSize *= 1.1;
+    printf("Engine.TileSize: %f\n", Engine.TileSize);
 }
 
 #ifdef __EMSCRIPTEN__

@@ -10,6 +10,8 @@ typedef struct Engine_t
     unsigned int VBO, VAO, EBO;
 
     int Texture;
+
+    float TileSize;
 } Engine_t;
 
 int Engine_init (Engine_t* engine);

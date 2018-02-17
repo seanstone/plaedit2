@@ -12,6 +12,8 @@ EM_BOOL MouseHandler(int eventType, const EmscriptenMouseEvent *mouseEvent, void
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void window_size_callback(GLFWwindow* window, int width, int height);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+
 void processInput(GLFWwindow *window);
 void loop (void);
 
