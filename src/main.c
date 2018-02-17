@@ -112,7 +112,7 @@ void window_size_callback(GLFWwindow* window, int width, int height)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     //printf("scroll_callback: %f, %f\n", xoffset, yoffset);
-    if (yoffset > 0 && Engine.TileSize > 1.0) Engine.TileSize /= 1.1;
+    if (yoffset > 0 && Engine.TileSize >= 1.1) Engine.TileSize /= 1.1;
     else if (yoffset < 0) Engine.TileSize *= 1.1;
     printf("Engine.TileSize: %f\n", Engine.TileSize);
 }

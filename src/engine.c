@@ -41,7 +41,7 @@ int Engine_init (Engine_t* engine)
     glVertexAttribPointer(ENGINE_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(ENGINE_ATTRIB_POSITION);
 
-    engine->Texture = loadTexture("textures/container.jpg");
+    engine->Texture = loadTexture("textures/tileset.png");
 
     // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0);
