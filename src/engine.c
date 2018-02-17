@@ -41,7 +41,7 @@ int Engine_init (Engine_t* engine)
     glVertexAttribPointer(ENGINE_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(ENGINE_ATTRIB_POSITION);
 
-    engine->Texture = loadTexture("textures/tileset.png");
+    engine->TileTexture = loadTexture("textures/tileset.png");
 
     // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -53,12 +53,10 @@ int Engine_init (Engine_t* engine)
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     glBindVertexArray(0);
 
-    engine->TileSize = 30.0;
+    engine->TileZoom = 30.0;
 
     return 0;
 }
-
-
 
 int Engine_render (Engine_t* engine)
 {
@@ -68,14 +66,16 @@ int Engine_render (Engine_t* engine)
     glfwGetWindowSize(engine->Window, &width, &height);
     glUniform2f(glGetUniformLocation(engine->ShaderProgram, "WindowSize"), width, height);
 
-    glUniform1f(glGetUniformLocation(engine->ShaderProgram, "TileSize"), engine->TileSize);
+    glUniform2f(glGetUniformLocation(engine->ShaderProgram, "TextureSize"), 1200, 720);
+
+    glUniform1f(glGetUniformLocation(engine->ShaderProgram, "TileZoom"), engine->TileZoom);
 
     // bind Texture
-    glBindTexture(GL_TEXTURE_2D, engine->Texture);
+    glBindTexture(GL_TEXTURE_2D, engine->TileTexture);
 
     glBindVertexArray(engine->VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
     //glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ENGINE_ATTRIB_POSITION, (width/engine->TileSize + 1) * (height/engine->TileSize + 1) );
+    glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ENGINE_ATTRIB_POSITION, (width/engine->TileZoom + 1) * (height/engine->TileZoom + 1) );
     // glBindVertexArray(0); // no need to unbind it every time
     return 0;
 }
