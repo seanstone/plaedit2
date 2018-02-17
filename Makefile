@@ -6,7 +6,10 @@ INCLUDE += -I glad/include -I include
 CFLAGS += -std=c11 -O1
 LDFLAGS += -lglfw3 -lGL -lpthread -lm -ldl
 XLDFLAGS += -lX11 -lXrandr -lXi -lXcursor -lXxf86vm -lXinerama
-EMFLAGS += -s WASM=1 -s NO_EXIT_RUNTIME=1 -s ALLOW_MEMORY_GROWTH=1 -s USE_GLFW=3 -s USE_WEBGL2=1 -s FULL_ES2=1 -s FULL_ES3=1 --preload-file $(PWD)/glsl@/glsl --preload-file $(PWD)/textures@/textures
+EMFLAGS += -s WASM=1 -s NO_EXIT_RUNTIME=1 -s ALLOW_MEMORY_GROWTH=1 \
+			-s USE_GLFW=3 -s USE_WEBGL2=1 -s FULL_ES2=1 -s FULL_ES3=1 \
+			--preload-file $(PWD)/glsl@/glsl --preload-file $(PWD)/textures@/textures \
+			-s EXPORTED_FUNCTIONS='["_main", "_readPLA"]' -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]'
 
 SRC += $(wildcard src/*.c)
 

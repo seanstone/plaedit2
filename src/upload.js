@@ -7,6 +7,7 @@ function uploadFile()
         fileReader.onload = function(fileLoadedEvent){
             Module['FS_createDataFile'](".", fileToLoad.name, fileReader.result, true, true);
             console.log(fileToLoad.name + " uploaded");
+            Module.cwrap('readPLA', 'number', ['string'])(fileToLoad.name);
         };
         fileReader.readAsBinaryString(fileToLoad);
     }
