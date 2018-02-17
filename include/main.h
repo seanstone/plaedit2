@@ -17,4 +17,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 void loop (void);
 
+#include "engine.h"
+
+extern Engine_t Engine;
+
 #endif

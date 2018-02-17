@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include "main.h"
 #include "engine.h"
+#include "pla.h"
 
 Engine_t Engine;
 
@@ -60,6 +61,7 @@ int main (void)
     #endif
 
     Engine_init(&Engine);
+    readPLA("pla/earth.PLA");
 
     #ifdef __EMSCRIPTEN__
     emscripten_set_resize_callback(0, 0, true, ResizeHandler);
