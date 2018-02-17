@@ -65,9 +65,7 @@ int Engine_render (Engine_t* engine)
     int width, height;
     glfwGetWindowSize(engine->Window, &width, &height);
     glUniform2f(glGetUniformLocation(engine->ShaderProgram, "WindowSize"), width, height);
-
     glUniform2f(glGetUniformLocation(engine->ShaderProgram, "TextureSize"), 1200, 720);
-
     glUniform1f(glGetUniformLocation(engine->ShaderProgram, "TileZoom"), engine->TileZoom);
 
     // bind Texture

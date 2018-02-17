@@ -32,6 +32,8 @@ int loadShader (char* path, GLenum shaderType) /* GL_VERTEX_SHADER or GL_FRAGMEN
         return -1;
     }
 
+    close(fd);
+
     return shader;
 }
 
