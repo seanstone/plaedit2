@@ -12,13 +12,10 @@
 			Module.locateFile = function(x) { return "../dist/" + x };
 		</script>
 		<script src="dist/main.js"></script>
-		<script src="src/upload.js"></script>
 	</head>
 	<body>
-		<div style="position:absolute; left:5%; top:5%; z-index:1;">
-			<input id="fileinput" type="file" accept=".pla"/>
-			<button onclick="uploadFile()">LOAD</button>
-		</div>
+		<input id="fileinput" type="file" accept=".pla" style="position:absolute; left:5%; top:5%; z-index:1;"/>
+		<script src="src/upload.js"></script>
 		<canvas id="canvas"></canvas>
 	</body>
 </html>

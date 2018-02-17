@@ -1,3 +1,5 @@
+document.getElementById("fileinput").addEventListener('change', uploadFile);
+
 function uploadFile()
 {
     var fileToLoad = document.getElementById("fileinput").files[0];
