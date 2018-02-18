@@ -13,6 +13,26 @@ out mediump vec2 TexCoord;
 
 vec2 Tile = vec2(0);
 
+const vec2 LifeBaseTile[] = vec2[16]
+(
+    vec2(40, 16),   // Prokaryotes
+    vec2(41, 17),   // Eukaryotes
+    vec2(41, 18),   // Radiates
+    vec2(41, 12),   // Arthropods
+    vec2(41, 14),   // Mollusks
+    vec2(41, 11),   // Fish
+    vec2(42, 1),    // Cetaceans
+    vec2(41, 13),   // Trichordates
+    vec2(41, 15),   // Insects
+    vec2(41, 9),    // Amphibians
+    vec2(41, 3),    // Reptiles
+    vec2(41, 5),    // Dinosaurs
+    vec2(41, 4),    // Avians
+    vec2(41, 2),    // Mammals
+    vec2(41, 20),   // Carniferns
+    vec2(41, 19)    // Robots
+);
+
 vec2 Pixel2Screen (vec2 pixelPos)
 {
     return pixelPos / (0.5 * vec2(WindowSize)) + vec2(-1.0);
@@ -53,59 +73,7 @@ void main() {
 
     if (int(PlaLifeData) > 0x00)
     {
-        vec2 LifeBaseTile;
-        switch (int(PlaLifeData) >> 4)
-        {
-            case 0x0: // Prokaryotes
-            LifeBaseTile = vec2(40, 16);
-            break;
-            case 0x1: // Eukaryotes
-            LifeBaseTile = vec2(41, 17);
-            break;
-            case 0x2: // Radiates
-            LifeBaseTile = vec2(41, 18);
-            break;
-            case 0x3: // Arthropods
-            LifeBaseTile = vec2(41, 12);
-            break;
-            case 0x4: // Mollusks
-            LifeBaseTile = vec2(41, 14);
-            break;
-            case 0x5: // Fish
-            LifeBaseTile = vec2(41, 11);
-            break;
-            case 0x6: // Cetaceans
-            LifeBaseTile = vec2(42, 1);
-            break;
-            case 0x7: // Trichordates
-            LifeBaseTile = vec2(41, 13);
-            break;
-            case 0x8: // Insects
-            LifeBaseTile = vec2(41, 15);
-            break;
-            case 0x9: // Amphibians
-            LifeBaseTile = vec2(41, 9);
-            break;
-            case 0xA: // Reptiles
-            LifeBaseTile = vec2(41, 3);
-            break;
-            case 0xB: // Dinosaurs
-            LifeBaseTile = vec2(41, 5);
-            break;
-            case 0xC: // Avians
-            LifeBaseTile = vec2(41, 4);
-            break;
-            case 0xD: // Mammals
-            LifeBaseTile = vec2(41, 2);
-            break;
-            case 0xE: // Carniferns
-            LifeBaseTile = vec2(41, 20);
-            break;
-            case 0xF: // Robots
-            LifeBaseTile = vec2(41, 19);
-            break;
-        }
-        Tile = LifeBaseTile + vec2(int(PlaLifeData) & 0xF, 0);
+        Tile = LifeBaseTile[int(PlaLifeData) >> 4] + vec2(int(PlaLifeData) & 0xF, 0);
     }
 
     switch (int(PlaData.y) & 0x3F)
