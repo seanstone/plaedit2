@@ -4,8 +4,9 @@
 #include "engine.h"
 #include "texture.h"
 
-#define ENGINE_ATTRIB_POSITION  0
-#define ENGINE_ATTRIB_INSTANCE  1
+#define ENGINE_ATTRIB_POSITION     0
+#define ENGINE_ATTRIB_PLADATA      1
+#define ENGINE_ATTRIB_PLALIFEDATA  2
 
 int Engine_init (Engine_t* engine)
 {
@@ -42,14 +43,20 @@ int Engine_init (Engine_t* engine)
     glEnableVertexAttribArray(ENGINE_ATTRIB_POSITION);
     glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind
 
-    /* Instance VBO */
-    glGenBuffers(1, &engine->instanceVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, engine->instanceVBO);
-    /* Instance attribute */
-    glVertexAttribPointer(ENGINE_ATTRIB_INSTANCE, 2, GL_UNSIGNED_BYTE, GL_FALSE, 0, (void*)0);
-    glEnableVertexAttribArray(ENGINE_ATTRIB_INSTANCE);
+    /* Pladata */
+    glGenBuffers(1, &engine->PlaDataVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, engine->PlaDataVBO);
+    glVertexAttribPointer(ENGINE_ATTRIB_PLADATA, 2, GL_UNSIGNED_BYTE, GL_FALSE, 0, (void*)0);
+    glEnableVertexAttribArray(ENGINE_ATTRIB_PLADATA);
+    glVertexAttribDivisor(ENGINE_ATTRIB_PLADATA, 1); // tell OpenGL this is an instanced vertex attribute.
+
+    glGenBuffers(1, &engine->PlaLifeDataVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, engine->PlaLifeDataVBO);
+    glVertexAttribPointer(ENGINE_ATTRIB_PLALIFEDATA, 1, GL_UNSIGNED_BYTE, GL_FALSE, 0, (void*)0);
+    glEnableVertexAttribArray(ENGINE_ATTRIB_PLALIFEDATA);
+    glVertexAttribDivisor(ENGINE_ATTRIB_PLALIFEDATA, 1); // tell OpenGL this is an instanced vertex attribute.
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glVertexAttribDivisor(ENGINE_ATTRIB_INSTANCE, 1); // tell OpenGL this is an instanced vertex attribute.
 
     /* Tileset texture */
     engine->TileTexture = loadTexture("textures/tileset.png");

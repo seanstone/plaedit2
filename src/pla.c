@@ -45,8 +45,12 @@ int readPLA (char* path)
             break;
     }
 
-    glBindBuffer(GL_ARRAY_BUFFER, Engine.instanceVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, Engine.PlaDataVBO);
     glBufferData(GL_ARRAY_BUFFER, 0x4000, &PlaData[0x0080], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, Engine.PlaLifeDataVBO);
+    glBufferData(GL_ARRAY_BUFFER, 0x2000, &PlaData[0x4080], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     close(fd);

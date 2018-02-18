@@ -8,7 +8,7 @@ typedef struct Engine_t
     GLFWwindow* Window;
     int ShaderProgram;
     unsigned int VBO, VAO, EBO;
-    unsigned int instanceVBO;
+    unsigned int PlaDataVBO, PlaLifeDataVBO;
     int     TileTexture;
     float   TileZoom;
 } Engine_t;

@@ -5,7 +5,9 @@ uniform ivec2 TextureSize;
 uniform float TileZoom;
 
 in mediump vec2 QuadPos;
+
 in lowp vec2 PlaData;
+in lowp float PlaLifeData;
 
 out mediump vec2 TexCoord;
 
@@ -27,7 +29,7 @@ void main() {
             Tile = vec2(7, 14);
         break;
         case 0x2: case 0x3: // Arctic
-            Tile = vec2(13, 4);
+            Tile = vec2(5, 14);
         break;
         case 0x4: case 0x5: // Boreal
             Tile = vec2(12, 4);
@@ -46,6 +48,58 @@ void main() {
         break;
         case 0xE: case 0xF: // Swamp
             Tile = vec2(8, 4);
+        break;
+    }
+
+    switch (int(PlaLifeData) >> 4)
+    {
+        case 0x0: // Prokaryotes
+        if ((int(PlaLifeData) & 0xF) > 0) Tile = vec2(41 + (int(PlaLifeData) & 0xF) - 1, 16);
+        break;
+        case 0x1: // Eukaryotes
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 17);
+        break;
+        case 0x2: // Radiates
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 18);
+        break;
+        case 0x3: // Arthropods
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 12);
+        break;
+        case 0x4: // Mollusks
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 14);
+        break;
+        case 0x5: // Fish
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 11);
+        break;
+        case 0x6: // Cetaceans
+        Tile = vec2(1 + 41 + (int(PlaLifeData) & 0xF), 1);
+        break;
+        case 0x7: // Trichordates
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 13);
+        break;
+        case 0x8: // Insects
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 15);
+        break;
+        case 0x9: // Amphibians
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 9);
+        break;
+        case 0xA: // Reptiles
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 3);
+        break;
+        case 0xB: // Dinosaurs
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 5);
+        break;
+        case 0xC: // Avians
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 4);
+        break;
+        case 0xD: // Mammals
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 2);
+        break;
+        case 0xE: // Carniferns
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 20);
+        break;
+        case 0xF: // Robots
+        Tile = vec2(41 + (int(PlaLifeData) & 0xF), 19);
         break;
     }
 
@@ -72,8 +126,6 @@ void main() {
         case 0x1C: case 0x1D: case 0x1E: case 0x1F:
             Tile = vec2(0, 8);
         break;
-        //default:
-            //Tile = vec2(0, 8);
     }
 
     TexCoord = (16.0 * QuadPos + 19.0 * Tile + vec2(3.0)) / vec2(TextureSize);
