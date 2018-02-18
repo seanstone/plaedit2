@@ -13,6 +13,18 @@ out mediump vec2 TexCoord;
 
 vec2 Tile = vec2(0);
 
+const vec2 BiomeBaseTile[] = vec2[8]
+(
+    vec2(7, 14),    // No Biome
+    vec2(5, 14),    // Arctic
+    vec2(12, 4),    // Boreal
+    vec2(14, 4),    // Desert
+    vec2(9, 4),     // Grasslands
+    vec2(10, 4),    // Forests
+    vec2(11, 4),    // Jungle
+    vec2(8, 4)      // Swamp
+);
+
 const vec2 LifeBaseTile[] = vec2[16]
 (
     vec2(40, 16),   // Prokaryotes
@@ -43,38 +55,10 @@ void main() {
     vec2 VertexPos = Pixel2Screen((vec2(gl_InstanceID / rows, gl_InstanceID % rows) + QuadPos) * TileZoom);
     gl_Position = vec4(VertexPos.x, -VertexPos.y, 0.0, 1.0);
 
-    switch (int(PlaData.x) >> 4)
-    {
-        case 0x0: case 0x1: // No Biome
-            Tile = vec2(7, 14);
-        break;
-        case 0x2: case 0x3: // Arctic
-            Tile = vec2(5, 14);
-        break;
-        case 0x4: case 0x5: // Boreal
-            Tile = vec2(12, 4);
-        break;
-        case 0x6: case 0x7: // Desert
-            Tile = vec2(14, 4);
-        break;
-        case 0x8: case 0x9: // Grasslands
-            Tile = vec2(9, 4);
-        break;
-        case 0xA: case 0xB: // Forests
-            Tile = vec2(10, 4);
-        break;
-        case 0xC: case 0xD: // Jungle
-            Tile = vec2(11, 4);
-        break;
-        case 0xE: case 0xF: // Swamp
-            Tile = vec2(8, 4);
-        break;
-    }
+    Tile = BiomeBaseTile[int(PlaData.x) >> 5];
 
     if (int(PlaLifeData) > 0x00)
-    {
         Tile = LifeBaseTile[int(PlaLifeData) >> 4] + vec2(int(PlaLifeData) & 0xF, 0);
-    }
 
     switch (int(PlaData.y) & 0x3F)
     {
