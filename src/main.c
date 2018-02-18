@@ -116,7 +116,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
     //printf("scroll_callback: %f, %f\n", xoffset, yoffset);
     if (yoffset > 0 && Engine.TileZoom >= 1.1) Engine.TileZoom /= 1.1;
     else if (yoffset < 0) Engine.TileZoom *= 1.1;
-    printf("Engine.TileZoom: %f\n", Engine.TileZoom);
+    //printf("Engine.TileZoom: %f\n", Engine.TileZoom);
 }
 
 #ifdef __EMSCRIPTEN__

@@ -14,11 +14,12 @@ int loadShader (char* path, GLenum shaderType) /* GL_VERTEX_SHADER or GL_FRAGMEN
         printf("Failed to open shader file: %s\n", path);
         return -1;
     }
-    int len = lseek(fd, 0, SEEK_END);
-    const char* shaderSource = mmap(0, len, PROT_READ, MAP_PRIVATE, fd, 0);
+    int len[1];
+    len[0] = lseek(fd, 0, SEEK_END);
+    const char* shaderSource = mmap(0, len[0], PROT_READ, MAP_PRIVATE, fd, 0);
 
     int shader = glCreateShader(shaderType);
-    glShaderSource(shader, 1, &shaderSource, NULL);
+    glShaderSource(shader, 1, &shaderSource, (const int*)&len);
     glCompileShader(shader);
 
     // check for shader compile errors
