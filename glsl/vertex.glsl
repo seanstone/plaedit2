@@ -25,6 +25,23 @@ const vec2 BiomeBaseTile[] = vec2[8]
     vec2(8, 4)      // Swamp
 );
 
+const vec2 CityBaseTile[] = vec2[13]
+(
+    vec2(0, 1),     // Stone Age
+    vec2(0, 2),     // Bronze Age
+    vec2(0, 3),     // Iron Age
+    vec2(0, 4),     // Industrial Age
+    vec2(0, 5),     // Atomic Age
+    vec2(0, 6),     // Information Age
+    vec2(0, 8),     // Nanotech Age
+    vec2(0, 0),
+    vec2(0, 0),
+    vec2(0, 0),
+    vec2(0, 0),
+    vec2(0, 0),
+    vec2(0, 0)
+);
+
 const vec2 LifeBaseTile[] = vec2[16]
 (
     vec2(40, 16),   // Prokaryotes
@@ -60,30 +77,8 @@ void main() {
     if (int(PlaLifeData) > 0x00)
         Tile = LifeBaseTile[int(PlaLifeData) >> 4] + vec2(int(PlaLifeData) & 0xF, 0);
 
-    switch (int(PlaData.y) & 0x3F)
-    {
-        case 0x04: case 0x05: case 0x06: case 0x07:
-            Tile = vec2(0, 1);
-        break;
-        case 0x08: case 0x09: case 0x0A: case 0x0B:
-            Tile = vec2(0, 2);
-        break;
-        case 0x0C: case 0x0D: case 0x0E: case 0x0F:
-            Tile = vec2(0, 3);
-        break;
-        case 0x10: case 0x11: case 0x12: case 0x13:
-            Tile = vec2(0, 4);
-        break;
-        case 0x14: case 0x15: case 0x16: case 0x17:
-            Tile = vec2(0, 5);
-        break;
-        case 0x18: case 0x19: case 0x1A: case 0x1B:
-            Tile = vec2(0, 6);
-        break;
-        case 0x1C: case 0x1D: case 0x1E: case 0x1F:
-            Tile = vec2(0, 8);
-        break;
-    }
+    if ((int(PlaData.y) & 0x3F) > 0x03)
+        Tile = CityBaseTile[((int(PlaData.y) & 0x3F) - 0x03) >> 2];
 
     TexCoord = (16.0 * QuadPos + 19.0 * Tile + vec2(3.0)) / vec2(TextureSize);
 }
