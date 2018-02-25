@@ -17,11 +17,7 @@ int main (void)
     printf("Main function begin\n");
 
     #ifdef __EMSCRIPTEN__
-    EM_ASM(
-		Module.canvas = (function() {
-          return document.getElementById('canvas');
-	  })();
-	);
+    EM_ASM(Module.canvas = (function() {return document.getElementById('canvas');})();, NULL);
     #endif
 
     glfwInit();
