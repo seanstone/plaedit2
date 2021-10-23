@@ -3,7 +3,7 @@ export BINARYEN := /usr
 EMFLAGS += -s WASM=1
 
 INCLUDE += -I glad/include -I include
-CFLAGS += -std=c11 -O1
+CFLAGS += -std=gnu11 -O1
 LDFLAGS += -lglfw3 -lGL -lpthread -lm -ldl
 XLDFLAGS += -lX11 -lXrandr -lXi -lXcursor -lXxf86vm -lXinerama
 EMFLAGS += -s WASM=1 -s NO_EXIT_RUNTIME=1 -s ALLOW_MEMORY_GROWTH=1 \
