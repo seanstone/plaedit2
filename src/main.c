@@ -60,14 +60,14 @@ int main (void)
     readPLA("pla/earth.PLA");
 
     #ifdef __EMSCRIPTEN__
-    emscripten_set_resize_callback(0, 0, true, ResizeHandler);
-    emscripten_set_mousedown_callback(0, 0, true, MouseHandler);
-    emscripten_set_mouseup_callback(0, 0, true, MouseHandler);
-    emscripten_set_mousemove_callback(0, 0, true, MouseHandler);
+    // emscripten_set_resize_callback(0, 0, true, ResizeHandler);
+    // emscripten_set_mousedown_callback(0, 0, true, MouseHandler);
+    // emscripten_set_mouseup_callback(0, 0, true, MouseHandler);
+    // emscripten_set_mousemove_callback(0, 0, true, MouseHandler);
     #endif
-    glfwSetFramebufferSizeCallback(Engine.Window, framebuffer_size_callback);
-    glfwSetWindowSizeCallback(Engine.Window, window_size_callback);
-    glfwSetScrollCallback(Engine.Window, scroll_callback);
+    // glfwSetFramebufferSizeCallback(Engine.Window, framebuffer_size_callback);
+    // glfwSetWindowSizeCallback(Engine.Window, window_size_callback);
+    // glfwSetScrollCallback(Engine.Window, scroll_callback);
 
     #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop(loop, 0, 1);
